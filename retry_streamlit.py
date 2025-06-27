@@ -52,10 +52,10 @@ if uploaded_files:
             df_produit, base_name = traiter_produit(folder=tmpdir, return_df=True)
             df_attribut = traiter_attribut_produit(folder=tmpdir, return_df=True)
             df_associe = charger_produit_associe(folder=tmpdir)
-            df_groupe_option = charger_groupe_option(folder=tmpdir)
-            st.write("df_groupe_option type:", type(df_groupe_option))
+            df_groupe_option, base_name = charger_groupe_option(folder=tmpdir)
+            #st.write("df_groupe_option type:", type(df_groupe_option))
             # 🔍 DEBUG : Afficher les colonnes disponibles
-            st.write("🔍 Colonnes de df_groupe_option :", df_groupe_option.columns.tolist())
+            #st.write("🔍 Colonnes de df_groupe_option :", df_groupe_option.columns.tolist())
 
             if "Reference" not in df_groupe_option.columns:
                 raise ValueError("❌ La colonne 'Reference' est manquante dans le fichier groupe_option")
