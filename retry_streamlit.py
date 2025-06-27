@@ -39,17 +39,24 @@ if uploaded_files:
         st.info("📦 Traitement des fichiers en cours...")
 
         # Sauvegarde locale des fichiers
+        filenames = []
         for uploaded_file in uploaded_files:
             path = os.path.join(tmpdir, uploaded_file.name)
             with open(path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
-
+            filenames.append(uploaded_file.name)
         try:
             # Chargement des fichiers nécessaires
             df_produit, base_name = traiter_produit(folder=tmpdir, return_df=True)
             df_attribut = traiter_attribut_produit(folder=tmpdir, return_df=True)
             df_associe = charger_produit_associe(folder=tmpdir)
             df_groupe_option = charger_groupe_option(folder=tmpdir)
+
+            # 🔍 DEBUG : Afficher les colonnes disponibles
+            st.write("🔍 Colonnes de df_groupe_option :", df_groupe_option.columns.tolist())
+
+            if "Reference" not in df_groupe_option.columns:
+                raise ValueError("❌ La colonne 'Reference' est manquante dans le fichier groupe_option")
 
             df_lien_produit_option, lien_base_name = charger_lien_produit_option(folder=tmpdir)
             df_groupes_option_definitions, groupe_base_name = charger_groupe_option_definition(folder=tmpdir)
