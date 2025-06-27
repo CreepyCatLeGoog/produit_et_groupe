@@ -3,7 +3,6 @@ import os
 import re
 from lxml import etree
 import html
-import chardet
 import unicodedata
 
 # === CONFIGURATION ===
@@ -166,9 +165,7 @@ def traiter_produit(folder="data", output="output", return_df=False):
         if filename.startswith("produit") and filename.endswith(".csv") and "associe" not in filename and "groupe_option" not in filename:
             path = os.path.join(folder, filename)
             try:
-                with open(path, "rb") as f:
-                    enc = chardet.detect(f.read())["encoding"]
-                df = pd.read_csv(path, sep=";", dtype=str, encoding=enc, on_bad_lines="skip")
+                df = pd.read_csv(path, sep=";", dtype=str, encoding="utf-8-sig", on_bad_lines="skip")
                 df.columns = df.columns.str.strip().str.replace('"', '').str.replace("'", '')
                 df = df[[col for col in WHITELIST_COLUMNS_PRODUIT if col in df.columns]]
                 df = df.dropna(axis=1, how="all")
